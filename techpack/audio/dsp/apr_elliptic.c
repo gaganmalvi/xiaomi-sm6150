@@ -169,7 +169,7 @@ int32_t ultrasound_apr_set_parameter(int32_t port_id, uint32_t param_id,
 	int32_t  ret = 0;
 	uint32_t module_id;
 
-	pr_err("%s: port_id %x, param_id %x, module_id %x\n",
+	pr_debug("%s: port_id %x, param_id %x, module_id %x\n",
 			__func__, port_id, param_id, module_id);
 
 	if (port_id == ELLIPTIC_PORT_ID)
@@ -331,7 +331,7 @@ static int32_t process_diagnostics_msg(uint32_t *payload, uint32_t payload_size)
 	size_t copy_size = 0;
 	int32_t  ret = -1;
 
-	pr_err("[ELUS]: %s() size:%d\n", __func__, payload_size);
+	pr_debug("[ELUS]: %s() size:%d\n", __func__, payload_size);
 
 	if (payload_size >= ELLIPTIC_DIAGNOSTICS_DATA_SIZE) {
 		pr_debug("[ELUS]: diagnostics_data copied to local AP cache");
