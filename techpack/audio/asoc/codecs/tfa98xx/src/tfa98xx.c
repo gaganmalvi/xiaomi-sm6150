@@ -2384,10 +2384,6 @@ static void tfa98xx_container_loaded(const struct firmware *cont, void *context)
 
 		mutex_unlock(&tfa98xx->dsp_lock);
 	}
-	if(tfa98xx->flags & TFA98XX_FLAG_ADAPT_NOISE_MODE)
-		queue_delayed_work(tfa98xx->tfa98xx_wq,
-						&tfa98xx->nmodeupdate_work,
-						0);		
 	tfa98xx_interrupt_enable(tfa98xx, true);
 }
 
@@ -2943,6 +2939,8 @@ static int tfa98xx_mute(struct snd_soc_dai *dai, int mute, int stream)
 		tfa_dev_stop(tfa98xx->tfa);
 		tfa98xx->dsp_init = TFA98XX_DSP_INIT_STOPPED;
 		mutex_unlock(&tfa98xx->dsp_lock);
+		if(tfa98xx->flags & TFA98XX_FLAG_ADAPT_NOISE_MODE)
+			cancel_delayed_work_sync(&tfa98xx->nmodeupdate_work);
 	} else {
 		if (stream == SNDRV_PCM_STREAM_PLAYBACK) {
 			tfa98xx->pstream = 1;
@@ -2967,6 +2965,10 @@ static int tfa98xx_mute(struct snd_soc_dai *dai, int mute, int stream)
 		if (tfa98xx->dsp_init != TFA98XX_DSP_INIT_PENDING)
 			tfa98xx_dsp_init(tfa98xx);
 #endif//	
+	     if(tfa98xx->flags & TFA98XX_FLAG_ADAPT_NOISE_MODE)
+		 	queue_delayed_work(tfa98xx->tfa98xx_wq,
+						&tfa98xx->nmodeupdate_work,
+						0);	
 	}
 
 	return 0;

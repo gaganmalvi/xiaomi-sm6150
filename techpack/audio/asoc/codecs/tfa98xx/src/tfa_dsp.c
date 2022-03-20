@@ -3947,6 +3947,7 @@ enum Tfa98xx_Error tfa_status(struct tfa_device *tfa)
 
 	return Tfa98xx_Error_Ok;
 }
+#ifdef __KERNEL__
 #define NR_OF_BATS 10
 void tfa_adapt_noisemode(struct tfa_device *tfa)
 {
@@ -4070,3 +4071,4 @@ void tfa_lp_mode_interrupt(struct tfa_device *tfa)
 		tfa_irq_clear(tfa, tfa9912_irq_stclpr);
 	}
 }
+#endif//__KERNEL__
