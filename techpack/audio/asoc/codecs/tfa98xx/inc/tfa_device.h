@@ -64,6 +64,7 @@ struct tfa_device_ops {
 	enum Tfa98xx_Error (*dsp_write_tables)(struct tfa_device *tfa, int sample_rate); /**< write the device/type specific delaytables */
 	enum Tfa98xx_Error (*auto_copy_mtp_to_iic)(struct tfa_device *tfa); /**< Set auto_copy_mtp_to_iic */
 	enum Tfa98xx_Error (*factory_trimmer)(struct tfa_device *tfa); /**< Factory trimming for the Boost converter */
+	enum Tfa98xx_Error (*phase_shift)(struct tfa_device *tfa); /**< Control for PWM phase shift  */
 	int (*set_swprof)(struct tfa_device *tfa, unsigned short new_value); /**< Set the sw profile in the struct and the hw register */
 	int (*get_swprof)(struct tfa_device *tfa); /**< Get the sw profile from the hw register */
 	int(*set_swvstep)(struct tfa_device *tfa, unsigned short new_value); /**< Set the sw vstep in the struct and the hw register */
@@ -140,6 +141,7 @@ struct tfa_device {
 	int convert_dsp32; /**< convert 24 bit DSP messages to 32 bit */
 	int sync_iv_delay; /**< synchronize I/V delay at cold start */
 	int is_probus_device; /**< probus device: device without internal DSP */
+	unsigned int rate; 
 	int needs_reset; /**< add the reset trigger for SetAlgoParams and SetMBDrc commands */
 	struct kmem_cache *cachep;	/**< Memory allocator handle */
 };
