@@ -1643,8 +1643,20 @@ enum Tfa98xx_Error tfaContWriteProfile(struct tfa_device *tfa, int prof_idx, int
 			if (err) return err;
 
 			/* Wait until we are in PLL powerdown */
+			tries = 0;
 			do {
 				err = tfa98xx_dsp_system_stable(tfa, &ready);
+				manstate = TFA_GET_BF(tfa, MANSTATE); 
+				if (manstate == 6) {
+					TFA_SET_BF_VOLATILE(tfa, SBSL, 1);
+					msleep_interruptible(10); /* wait 10ms to avoid busload */
+					err = tfa98xx_powerdown(tfa, 1);
+					if (err) return err;
+				} else if (manstate == 0) {
+					/* Reset SBSL back after powering down */
+					TFA_SET_BF_VOLATILE(tfa, SBSL, 0);
+				}
+
 				if (!ready)
 					break;
 				else
@@ -1725,6 +1737,33 @@ enum Tfa98xx_Error tfaContWriteProfile(struct tfa_device *tfa, int prof_idx, int
 				return Tfa98xx_Error_Bad_Parameter;
 			break;
 		}
+	}
+
+	if (strstr(tfaContGetString(tfa->cnt, &prof->name), ".standby") != NULL) {
+		pr_info("Keep power down without writing files, in standby profile!\n");
+
+		err = tfa98xx_powerdown(tfa, 1);
+		if (err) return err;
+
+		/* Wait until we are in PLL powerdown */
+		tries = 0;
+		do {
+			err = tfa98xx_dsp_system_stable(tfa, &ready);
+			if (!ready)
+				break;
+			else
+				msleep_interruptible(10); /* wait 10ms to avoid busload */
+			tries++;
+		} while (tries <= 100);
+
+		if (tries > 100) {
+			pr_debug("Wait for PLL powerdown timed out!\n");
+			return Tfa98xx_Error_StateTimedOut;
+		}
+
+		err = tfa_show_current_state(tfa);
+
+		return err;
 	}
 
 	if (prof->group != previous_prof->group || prof->group == 0) {
