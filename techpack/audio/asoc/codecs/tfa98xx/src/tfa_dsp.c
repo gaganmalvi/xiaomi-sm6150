@@ -3048,6 +3048,26 @@ enum Tfa98xx_Error tfaRunWaitCalibration(struct tfa_device *tfa, int *calibrateD
 	return err;
 }
 
+enum Tfa98xx_Error tfa_error_to_Tfa98xx_Error(enum tfa_error err)
+{
+	switch(err) {
+	case tfa_error_ok:
+		return Tfa98xx_Error_Ok;
+	case tfa_error_device:
+		return Tfa98xx_Error_Device;
+	case tfa_error_bad_param:
+		return Tfa98xx_Error_Bad_Parameter;
+	case tfa_error_noclock:
+		return Tfa98xx_Error_NoClock;
+	case tfa_error_timeout:
+		return Tfa98xx_Error_StateTimedOut;
+	case tfa_error_dsp:
+		return Tfa98xx_Error_DSP_not_running;
+	default:
+		return Tfa98xx_Error_Fail;
+	}
+}
+
 /*
  * tfa_dev_start will only do the basics: Going from powerdown to operating or a profile switch.
  * for calibrating or akoustic shock handling use the tfa98xxCalibration function.
@@ -3141,7 +3161,7 @@ enum tfa_error tfa_dev_start(struct tfa_device *tfa, int next_profile, int vstep
 		tfa_dev_set_swvstep(tfa, (unsigned short)tfa->vstep);
 
 		pr_info("Power down device, by force, in standby profile!\n");
-		err = tfa_dev_stop(tfa);
+		err = tfa_error_to_Tfa98xx_Error(tfa_dev_stop(tfa));
 		goto error_exit;
 	}
 
