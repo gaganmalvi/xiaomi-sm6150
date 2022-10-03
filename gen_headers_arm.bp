@@ -16,8 +16,11 @@ gen_headers_exclude_srcs_arm = [
 
 gen_headers_out_arm = [
 
-    // Matching generated-y:
-
+    "linux/ncsi.h",
+    "misc/drv8846.h", 
+    "linux/f2fs.h", 
+    "linux/leds-aw3644.h",
+    "linux/akm09970.h",
     "asm/unistd-common.h",
     "asm/unistd-oabi.h",
     "asm/unistd-eabi.h",
