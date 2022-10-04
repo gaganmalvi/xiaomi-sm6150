@@ -18,7 +18,6 @@ gen_headers_out_arm = [
 
     "linux/ncsi.h",
     "misc/drv8846.h", 
-    "linux/f2fs.h", 
     "linux/leds-aw3644.h",
     "linux/akm09970.h",
     "asm/unistd-common.h",

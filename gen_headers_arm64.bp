@@ -393,7 +393,6 @@ gen_headers_out_arm64 = [
     "linux/ncp_no.h",
     "linux/ncsi.h",
     "linux/leds-aw3644.h",
-    "linux/f2fs.h",
     "linux/akm09970.h",
     "linux/ndctl.h",
     "linux/neighbour.h",
