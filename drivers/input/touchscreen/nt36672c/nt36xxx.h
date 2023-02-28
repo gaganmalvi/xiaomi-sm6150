@@ -131,12 +131,13 @@ struct nvt_ts_data {
 	struct delayed_work nvt_lockdown_work;
 	uint16_t addr;
 	int8_t phys[32];
-#ifdef CONFIG_DRM
+#if defined(CONFIG_FB)
+#ifdef _DRM_NOTIFIER_H_
 	struct notifier_block drm_notif;
 #else
 	struct notifier_block fb_notif;
 #endif
-#if defined(CONFIG_HAS_EARLYSUSPEND)
+#elif defined(CONFIG_HAS_EARLYSUSPEND)
 	struct early_suspend early_suspend;
 #endif
 	uint8_t fw_ver;
