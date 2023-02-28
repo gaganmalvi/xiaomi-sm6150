@@ -16,7 +16,6 @@ gen_headers_exclude_srcs_arm = [
 
 gen_headers_out_arm = [
 
-    "linux/ncsi.h",
     "misc/drv8846.h", 
     "linux/leds-aw3644.h",
     "linux/akm09970.h",
