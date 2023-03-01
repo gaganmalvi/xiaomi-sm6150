@@ -10,6 +10,8 @@
 #include "u_os_desc.h"
 #include <linux/power_supply.h>
 
+#define MSOS_VENDOR_TYPE 0x01
+
 #ifdef CONFIG_USB_CONFIGFS_UEVENT
 #include <linux/platform_device.h>
 #include <linux/kdev_t.h>
