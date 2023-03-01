@@ -84,3 +84,5 @@ obj-y += soc/
 obj-y += dsp/
 obj-y += ipc/
 obj-y += asoc/
+
+ccflags-y += $(call cc-disable-warning, unused-but-set-variable)
